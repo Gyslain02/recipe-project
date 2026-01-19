@@ -80,7 +80,28 @@ export const recipesApi = api.injectEndpoints({
         method: 'POST',
         body: recipe,
       }),
-      invalidatesTags: [{ type: 'Recipe', id: 'LIST' }],
+      async onQueryStarted(recipe, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          recipesApi.util.updateQueryData('getRecipes', { limit: 50 }, (draft) => {
+            const newRecipe = {
+              id: Math.floor(Math.random() * 10000) + 100,
+              ...recipe,
+              userId: 1,
+              rating: 0,
+              reviewCount: 0,
+              mealType: recipe.mealType || [],
+            } as Recipe;
+            draft.recipes.unshift(newRecipe);
+            draft.total += 1;
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+
     }),
     updateRecipe: builder.mutation<Recipe, Partial<Recipe> & { id: number }>({
       query: ({ id, ...patch }) => ({
@@ -88,14 +109,42 @@ export const recipesApi = api.injectEndpoints({
         method: 'PUT',
         body: patch,
       }),
-      invalidatesTags: (_result, _error, { id }) => [{ type: 'Recipe', id }],
+      async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          recipesApi.util.updateQueryData('getRecipes', { limit: 50 }, (draft) => {
+            const recipe = draft.recipes.find((r) => r.id === id);
+            if (recipe) {
+              Object.assign(recipe, patch);
+            }
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+
     }),
     deleteRecipe: builder.mutation<{ isDeleted: boolean; deletedOn: string }, number>({
       query: (id) => ({
         url: `/recipes/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: [{ type: 'Recipe', id: 'LIST' }],
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          recipesApi.util.updateQueryData('getRecipes', { limit: 50 }, (draft) => {
+            draft.recipes = draft.recipes.filter((r) => r.id !== id);
+            draft.total = Math.max(0, draft.total - 1);
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
+
     }),
   }),
 });
