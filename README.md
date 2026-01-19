@@ -4,7 +4,7 @@ A modern, full-featured recipe management application built with React, TypeScri
 
 ## Live Demo
 
-[View Live Application](#) - 
+[View Live Application](#) - https://ubiquitous-kataifi-b53ae1.netlify.app/
 
 ## Features
 
