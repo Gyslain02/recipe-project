@@ -65,14 +65,14 @@ export const recipesApi = api.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.recipes.map(({ id }) => ({ type: 'Recipe' as const, id })),
-              { type: 'Recipe', id: 'LIST' },
-            ]
+            ...result.recipes.map(({ id }) => ({ type: 'Recipe' as const, id })),
+            { type: 'Recipe', id: 'LIST' },
+          ]
           : [{ type: 'Recipe', id: 'LIST' }],
     }),
     getRecipe: builder.query<Recipe, number>({
       query: (id) => `/recipes/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Recipe', id }],
+      providesTags: (_result, _error, id) => [{ type: 'Recipe', id }],
     }),
     createRecipe: builder.mutation<Recipe, CreateRecipeRequest>({
       query: (recipe) => ({
@@ -88,7 +88,7 @@ export const recipesApi = api.injectEndpoints({
         method: 'PUT',
         body: patch,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Recipe', id }],
+      invalidatesTags: (_result, _error, { id }) => [{ type: 'Recipe', id }],
     }),
     deleteRecipe: builder.mutation<{ isDeleted: boolean; deletedOn: string }, number>({
       query: (id) => ({
