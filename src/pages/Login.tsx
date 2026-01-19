@@ -4,6 +4,7 @@ import { useLoginMutation } from '@/services/authApi';
 import { useAppDispatch } from '@/store/hooks';
 import { setCredentials } from '@/features/authSlice';
 import { LogIn } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -27,9 +28,11 @@ export default function Login() {
           image: result.image,
         },
       }));
+      toast.success('Welcome back!');
       navigate('/dashboard');
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to login:', err);
+      toast.error(err.data?.message || 'Invalid username or password');
     }
   };
 

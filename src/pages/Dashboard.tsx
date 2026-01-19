@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { logout } from '@/features/authSlice';
 import RecipeModal, { RecipeFormData } from '@/components/RecipeModal';
 import { Plus, LogOut, User, Edit, Trash2, Clock, Users } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -29,15 +30,18 @@ export default function Dashboard() {
 
   const handleLogout = () => {
     dispatch(logout());
+    toast.success('Logged out successfully');
     navigate('/');
   };
 
   const handleCreateRecipe = async (data: RecipeFormData) => {
     try {
       await createRecipe(data).unwrap();
+      toast.success('Recipe created successfully');
       setIsModalOpen(false);
     } catch (error) {
       console.error('Failed to create recipe:', error);
+      toast.error('Failed to create recipe');
     }
   };
 
@@ -45,10 +49,12 @@ export default function Dashboard() {
     if (!editingRecipe) return;
     try {
       await updateRecipe({ id: editingRecipe.id, ...data }).unwrap();
+      toast.success('Recipe updated successfully');
       setEditingRecipe(null);
       setIsModalOpen(false);
     } catch (error) {
       console.error('Failed to update recipe:', error);
+      toast.error('Failed to update recipe');
     }
   };
 
@@ -56,8 +62,10 @@ export default function Dashboard() {
     if (window.confirm('Are you sure you want to delete this recipe?')) {
       try {
         await deleteRecipe(id).unwrap();
+        toast.success('Recipe deleted successfully');
       } catch (error) {
         console.error('Failed to delete recipe:', error);
+        toast.error('Failed to delete recipe');
       }
     }
   };
