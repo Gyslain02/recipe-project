@@ -4,7 +4,7 @@ A modern, full-featured recipe management application built with React, TypeScri
 
 ## Live Demo
 
-[View Live Application](#) - Deploy link will be added after deployment
+[View Live Application](#) - 
 
 ## Features
 
