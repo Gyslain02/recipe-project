@@ -92,7 +92,10 @@ export default function Dashboard() {
 
             <div className="flex items-center gap-4">
               {profile && (
-                <div className="flex items-center gap-3 px-4 py-2 bg-gray-100 rounded-lg">
+                <button
+                  onClick={() => navigate('/profile')}
+                  className="flex items-center gap-3 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition text-left"
+                >
                   <img
                     src={profile.image || user?.image}
                     alt={profile.firstName}
@@ -104,7 +107,7 @@ export default function Dashboard() {
                     </p>
                     <p className="text-xs text-gray-600">{profile.email}</p>
                   </div>
-                </div>
+                </button>
               )}
 
               <button

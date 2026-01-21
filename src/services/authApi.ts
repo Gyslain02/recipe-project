@@ -13,7 +13,7 @@ interface LoginResponse {
   lastName: string;
   gender: string;
   image: string;
-  token: string;
+  accessToken: string;
   refreshToken: string;
 }
 

@@ -18,7 +18,7 @@ export default function Login() {
     try {
       const result = await login({ username, password }).unwrap();
       dispatch(setCredentials({
-        token: result.token,
+        token: result.accessToken,
         user: {
           id: result.id,
           username: result.username,
